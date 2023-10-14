@@ -1,0 +1,205 @@
+1.function doubleUsingCallback(arr, callback) {
+  if (typeof callback !== 'function') {
+    throw new Error('Callback must be a function');
+  }
+
+  if (!Array.isArray(arr)) {
+    throw new Error('Input must be an array');
+  }
+
+  const doubledArray = arr.map(callback);
+  return doubledArray;
+}
+
+// Example usage:
+const originalArray = [1, 2, 3, 4, 5];
+
+const double = (num) => num * 2;
+const doubledArray = doubleUsingCallback(originalArray, double);
+
+console.log(doubledArray); // Output: [2, 4, 6, 8, 10]
+
+
+2.function numberChecker(arr) {
+  return function(number) {
+    return arr.includes(number);
+  };
+}
+
+const arr = [1, 2, 3, 4, 5];
+const checkNum = numberChecker(arr);
+
+console.log(checkNum(3)); // true
+console.log(checkNum(6)); // false
+
+
+3.function filterByCategory(products) {
+  return function(category) {
+    return products.filter(product => product.category === category);
+  };
+}
+
+var products = [
+  { name: "Shirt", category: "Clothing" },
+  { name: "Pants", category: "Clothing" },
+  { name: "Hat", category: "Accessories" },
+  { name: "Sunglasses", category: "Accessories" },
+];
+
+var clothingProducts = filterByCategory(products)("Clothing");
+console.log(clothingProducts);
+// Output: [{name: "Shirt", category: "Clothing"}, {name: "Pants", category: "Clothing"}]
+
+
+4.// Sample list of books
+const books = [
+  { title: "The Catcher in the Rye", author: "J.D. Salinger", year: 1951 },
+  { title: "To Kill a Mockingbird", author: "Harper Lee", year: 1960 },
+  { title: "1984", author: "George Orwell", year: 1949 },
+  { title: "Pride and Prejudice", author: "Jane Austen", year: 1813 },
+];
+
+// Callback function to log titles in alphabetical order
+function logTitlesInAlphabeticalOrder(titles) {
+  titles.sort(); // Sort the titles in alphabetical order
+  titles.forEach(title => console.log(title));
+}
+
+// Function to extract titles and pass them to the callback
+function extractTitlesAndLogInOrder(books, callback) {
+  const titles = books.map(book => book.title);
+  callback(titles);
+}
+
+// Call the function to extract titles and log them in alphabetical order
+extractTitlesAndLogInOrder(books, logTitlesInAlphabeticalOrder);
+
+
+5.function greetWithPromise(name) {
+  return new Promise((resolve, reject) => {
+    if (name) {
+      const greeting = `Hello, ${name}!`;
+      resolve(greeting);
+    } else {
+      reject("Name is required to generate a greeting.");
+    }
+  });
+}
+
+// Example usage:
+const name = "Mithun";
+
+greetWithPromise(name)
+  .then(greeting => {
+    console.log(greeting);
+  })
+  .catch(error => {
+    console.error(error);
+  });
+
+6.function fetchDataFromAPI() {
+  const apiUrl = 'https://jsonplaceholder.typicode.com/todos/1';
+
+  // Use the fetch function to make the API request
+  fetch(apiUrl)
+    .then(response => {
+      // Check if the response status is OK (HTTP status code 200)
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+
+      // Parse the response as JSON
+      return response.json();
+    })
+    .then(data => {
+      // Log the result to the console
+      console.log(data);
+    })
+    .catch(error => {
+      // Handle any errors
+      console.error(error);
+    });
+}
+
+
+7.async function fetchDataFromMultipleAPIs() {
+  const todoUrl = 'https://jsonplaceholder.typicode.com/todos/1';
+  const postUrl = 'https://jsonplaceholder.typicode.com/posts/1';
+
+  try {
+    // Use Promise.all to fetch data from both APIs concurrently
+    const [todoResponse, postResponse] = await Promise.all([
+      fetch(todoUrl),
+      fetch(postUrl),
+    ]);
+
+    if (!todoResponse.ok || !postResponse.ok) {
+      throw new Error('Failed to fetch data from one or both APIs');
+    }
+
+    // Parse the responses as JSON
+    const todoData = await todoResponse.json();
+    const postData = await postResponse.json();
+
+    // Combine the results into an object
+    const combinedData = {
+      todo: todoData,
+      post: postData,
+    };
+
+    // Log the combined data
+    console.log(combinedData);
+  } catch (error) {
+    // Handle any errors
+    console.error(error);
+  }
+}
+
+// Call the function to fetch and combine data from both APIs
+fetchDataFromMultipleAPIs();
+
+8.const apiUrl = 'https://jsonplaceholder.typicode.com/posts';
+
+fetch(apiUrl)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Failed to fetch data');
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log(data);
+  })
+  .catch(error => {
+    console.error(error);
+  });
+
+9.<!DOCTYPE html>
+<html>
+<head>
+    <title>Error Handling with Fetch</title>
+</head>
+<body>
+    <div id="output"></div>
+
+    <script>
+        const apiUrl = 'https://jsonplaceholder.typicode.com/posts/123456789';
+
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Handle the successful response
+                document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                // Handle errors by displaying an error message
+                document.getElementById('output').innerText = 'Error: ' + error.message;
+            });
+    </script>
+</body>
+</html>
